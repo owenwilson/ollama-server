@@ -36,5 +36,5 @@ sudo cat /etc/systemd/system/ollama.service.d/override.conf
 ```
 
 ```sh
-sudo ss -tln | grep ollama
+sudo ss -tulpn | grep ollama
 ```
