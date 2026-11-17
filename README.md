@@ -19,7 +19,7 @@ sudo systemctl edit ollama
 
 ```sh
 [Service]
-Environment="OLLAMA_HOST=0.0.0.0"
+Environment="OLLAMA_HOST=0.0.0.0:11434"
 Environment="OLLAMA_KEEP_ALIVE=-1s"
 Environment="OLLAMA_NUM_PARALLEL=1"
 Environment="OLLAMA_LOAD_TIMEOUT=10m"
@@ -60,3 +60,59 @@ curl http://[IP_DEL_SERVIDOR_LINUX]:11434
 ```sh
 sudo systemctl revert ollama
 ```
+
+## Modefile
+
+- create a modified version of the model with a broader context using a Modefile
+
+```sh
+FROM qwen2.5-coder:14b
+PARAMETER num_ctx 32768
+```
+- build new model
+
+```sh
+ollama create qwen2.5-coder-14b-32k -f Modefile
+```
+
+## vscode
+
+- configuration file of continue.dev
+
+```sh
+~/.continue/config.yaml
+```
+
+- example config.yaml
+
+```sh
+name: Main Config
+version: 1.0.0
+schema: v1
+models:
+  - name: Qwen2.5 Coder 14B (Remote)
+    provider: ollama
+    model: qwen2.5-coder-14b-32k
+    apiBase: http://IP:11434
+    roles:
+      - chat
+      - edit
+      - apply
+  - name: Qwen2.5-Coder 1.5B
+    provider: ollama
+    model: qwen2.5-coder:1.5b-base
+    roles:
+      - autocomplete
+  - name: Nomic Embed
+    provider: ollama
+    model: nomic-embed-text:latest
+    roles:
+      - embed
+```
+
+## references
+
+- check out [continue dev](https://continue.dev/)
+- check out [ide extension](https://docs.continue.dev/ide-extensions/quick-start)
+- check out [continue dev models](https://docs.continue.dev/customize/models)
+- check out [modelfile](https://docs.ollama.com/modelfile)
